@@ -1,4 +1,4 @@
-// 1. create dependency packages file - npm init -y
+// 1. create packages track file - npm init -y
 // 2. install express framework - npm inistall express
 // 3. create git ignore file ".git ignore"
 // 4. node theSimpleServer.js to run the server

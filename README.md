@@ -88,7 +88,7 @@ let User = function (data) {
 </pre></code>
 
 2. We define the "validate" and "register" method with JavaScript prototype property
-   <pre><code>
+<pre><code>
 User.prototype.validate = function () {
   if (this.data.username == "") {
     this.errors.push("Please enter an provide a username");
@@ -124,8 +124,7 @@ User.prototype.register = function () {
   this.validate();
   //2. Only if there are no validation errors, then save the user data into a database
 };
-   </pre></code>
-
+</pre></code>
 3. Install validator package - `npm install validator`
    In "User.js" - `const validator = require("validator");`
 4. In "router.js" - `router.post("/register", userController.register)`

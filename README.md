@@ -11,22 +11,42 @@ app.set("view engine", "ejs");
 
 2. Put `res.render("<your ejs file name>")` in the router
 
-3. Install ejs engine - `npm install ejs in the terminal`
+3. Install ejs engine - `npm install ejs`
 
-4. Allow node engine to access static file - `app.use(express.static("public"));`
+4. Allow node engine to access static file -
+   eg: let html page access css file
+   - Create "public" folder under the root path
+   * Create "main.css" file under "public" folder
+   - Place `<link rel="stylesheet" href="main.css">` in the html page
+   * Place `app.use(express.static("public"));` in "app.js" file
 
 ## Nodemon
 
 1. `npm install nodemon`
 2. Go to "package.json" file and add one more script `"watch":"nodemon app.js"` right above the "test" script
 
+## Two most common ways of submitting data on the web
+
+#### Add submit data on to our request object, so we can access data from req.body-
+
+1. `app.use(express.urlencoded({ extended: false }));`- traditional html form submit
+2. `app.use(express.json());`- sending over a bit json data
+
 ## Setting up a router
 
-1. In "app.js" - `const router = require("the router file url")`
+1. In "app.js" -
+<pre><code>
+const router = require("the router file url");
+app.use("/", router);
+</pre></code>
 2. In "router.js" -
 <pre><code>
-const express = require("express")
-const router = express.Router()
+const express = require("express");
+const router = express.Router();
+router.get("/", function (req, res) {
+  res.render("home-guest");
+});
+module.exports = router;
 </pre></code>
 
 ## Usage of module.exports
@@ -50,19 +70,12 @@ module.exports = {
 const userController = require("./controller/userController.js");
 router.get("/home", userController.home);
 </pre></code>
-2. In "userController" -
+2. In "userController.js" -
 <pre><code>
 exports.home = function (req, res) {
    res.render("home-guest");
 };
 </pre></code>
-
-## Two most common ways of submitting data on the web
-
-#### Add submit data on to our request object, so we can access data from req.body-
-
-1. `app.use(express.urlencoded({ extended: false }));`- traditional html form submit
-2. `app.use(express.json());`- sending over a bit json data
 
 ## Validate data
 

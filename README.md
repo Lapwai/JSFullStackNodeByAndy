@@ -1,37 +1,32 @@
-## Impletement ejs
+## Impletement ejs engine
 
-#### 1. the first "views" is the express option,
+1. In "app.js" -
+<pre><code>
+//the first "views" is the express option,
+//the second "views" is the folder which contains the .ejs file we want to render
+app.set("views","views");
+//which templete system(view engine) we want to use
+app.set("view engine", "ejs");
+</pre></code>
 
-#### 2. the second "views" is the folder which contains the .ejs file we want to render
+2. Put `res.render("<your ejs file name>")` in the router
 
-`app.set("views","views") `
+3. Install ejs engine - `npm install ejs in the terminal`
 
-#### 3. which templete system(view engine) we want to use
-
-`app.set("view engine", "ejs");`
-
-#### 4.put `res.render("<your ejs file name>")` in the router
-
-#### 5. install ejs engine
-
-run `npm install ejs in the terminal`
-
-## Allow node engine to access static file
-
-1. `app.use(express.static("public"));`
+4. Allow node engine to access static file - `app.use(express.static("public"));`
 
 ## Nodemon
 
 1. `npm install nodemon`
-2. go to "package.json" file and add one more script `"watch":"nodemon app.js"` right above the "test" script
+2. Go to "package.json" file and add one more script `"watch":"nodemon app.js"` right above the "test" script
 
 ## Setting up a router
 
 1. In "app.js" - `const router = require("the router file url")`
 2. In "router.js" -
 <pre><code>
-   const express = require("express")
-   const router = express.Router()
+const express = require("express")
+const router = express.Router()
 </pre></code>
 
 ## Usage of module.exports
@@ -51,15 +46,15 @@ module.exports = {
 ## Controller
 
 1. In "router.js" -
-   <pre><code>
-   const userController = require("./controller/userController.js");
-   router.get("/home", userController.home);
-   </pre></code>
+<pre><code>
+const userController = require("./controller/userController.js");
+router.get("/home", userController.home);
+</pre></code>
 2. In "userController" -
 <pre><code>
-   exports.home = function (req, res) {
-      res.render("home-guest");
-   };
+exports.home = function (req, res) {
+   res.render("home-guest");
+};
 </pre></code>
 
 ## Two most common ways of submitting data on the web
@@ -75,11 +70,8 @@ module.exports = {
 
 #### In "home-gest.ejs" we have a form for user to register their account, when the user click the "register" button, the broswer will send a POST request to the server.
 
-<pre><code>
-<form action="/register" method="POST" id="registration-form">
-
-</form>
-</pre></code>
+`<form action="/register" method="POST" id="registration-form">`
+`</form>`
 
 1. Construct a model that reflects the "user" in this case.
 <pre><code>
@@ -131,14 +123,14 @@ User.prototype.register = function () {
    In "User.js" - `const validator = require("validator");`
 4. In "router.js" - `router.post("/register", userController.register)`
 5. In "userController.js" -
-   <pre><code>
-   exports.register = function (req, res) {
-      let user = new User(req.body);
-      user.register();
-         if (user.errors.length) {
-            res.send(user.errors);
-               } else {
-            res.send("Thanks for submitting");
-         }
-   };
-   </pre></code>
+<pre><code>
+exports.register = function (req, res) {
+   let user = new User(req.body);
+   user.register();
+      if (user.errors.length) {
+         res.send(user.errors);
+            } else {
+         res.send("Thanks for submitting");
+      }
+};
+</pre></code>

@@ -73,12 +73,14 @@ module.exports = {
 
 #### When the user click the "register" button, we need to validate their input. "Username" should be in alphanumeric, "Email" should require a validated email address.
 
--- Preface
-In "home-gest.ejs" we have a form for user to register their account, when the user click the "register" button, the broswer will send a POST request to the server.
+#### In "home-gest.ejs" we have a form for user to register their account, when the user click the "register" button, the broswer will send a POST request to the server.
 
-`<form action="/register" method="POST" id="registration-form">
+<pre><code>
+<form action="/register" method="POST" id="registration-form">
 
-</form>`
+</form>
+</pre></code>
+
 1. Construct a model that reflects the "user" in this case.
 <pre><code>
 let User = function (data) {

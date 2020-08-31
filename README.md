@@ -115,12 +115,14 @@ In "home-gest.ejs" we have a form for user to register their account, when the u
 3. Install validator package - `npm install validator`
 4. In "router.js" - `router.post("/register", userController.register)`
 5. In "userController.js" -
-   `exports.register = function (req, res) {`
-   `let user = new User(req.body);`
-   `user.register();`
-   `if (user.errors.length) {`
-   `res.send(user.errors);`
-   `} else {`
-   `res.send("Thanks for submitting");`
-   `}`
-   `};`
+   <pre><code>
+   exports.register = function (req, res) {
+      let user = new User(req.body);
+      user.register();
+         if (user.errors.length) {
+            res.send(user.errors);
+               } else {
+            res.send("Thanks for submitting");
+         }
+   };
+   </pre></code>

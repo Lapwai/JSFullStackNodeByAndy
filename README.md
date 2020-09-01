@@ -191,7 +191,7 @@ if (typeof this.data.username != "string") {
 const mongodb = require("mongodb");
 
 const connectionString =
-"mongodb+srv://abc:abc@cluster0-luxcw.azure.mongodb.net/JSFullStackNodeByAndy?retryWrites=true&w=majority";
+"<Your mongodb connection string>";
 
 mongodb.connect(
 connectionString,
@@ -220,3 +220,23 @@ User.prototype.register = function () {
   }
 };
 </pre></code>
+
+## Hide cretential environment variables
+
+1. Create ".env" in the root path
+2. In ".env" - paste `CONNECTIONSTRING=<Your mongodb connection string>`
+3. `npm install dotenv`
+4. In "db.js",
+   add -
+   <pre><code>
+   const dotenv = require("dotenv");
+   dotenv.config()
+   </pre></code>
+   edit -
+   <pre><code>
+   mongodb.connect(
+   env.process.CONNECTIONSTRING,
+   ...
+   );
+   </pre></code>
+5. Use the same way to hide the port number

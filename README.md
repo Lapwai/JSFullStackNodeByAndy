@@ -65,12 +65,14 @@ module.exports = {
 
 ## Controller
 
-1. In "router.js" -
+1. Create "Controllers" folder under the root path
+2. Create "userController.js" under "Controller" folder
+3. In "router.js" -
 <pre><code>
 const userController = require("./controller/userController.js");
 router.get("/home", userController.home);
 </pre></code>
-2. In "userController.js" -
+4. In "userController.js" -
 <pre><code>
 exports.home = function (req, res) {
    res.render("home-guest");
@@ -87,11 +89,16 @@ exports.home = function (req, res) {
 `</form>`
 
 1. Construct a model that reflects the "user" in this case.
+
+- Create "User.js/models"
 <pre><code>
 let User = function (data) {
   this.data = data;
+  //errors array is to store the errors
   this.errors = [];
 };
+exports.moduel = User;
+
 </pre></code>
 
 2. We define the "validate" and "register" method with JavaScript prototype property
@@ -137,6 +144,7 @@ User.prototype.register = function () {
 4. In "router.js" - `router.post("/register", userController.register)`
 5. In "userController.js" -
 <pre><code>
+let User = require("../models/user");
 exports.register = function (req, res) {
    let user = new User(req.body);
    user.register();

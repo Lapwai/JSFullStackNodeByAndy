@@ -158,3 +158,65 @@ exports.register = function (req, res) {
       }
 };
 </pre></code>
+
+## Avoid user send other than string via the register form
+
+1. In "User.js", add `this.cleanUp()` to register function
+2. cleanUp function
+<pre><code>
+if (typeof this.data.username != "string") {
+    //aviod user sending non string value to the database
+    this.data.username = "";
+  }
+  if (typeof this.data.email != "string") {
+    this.data.email = "";
+  }
+  if (typeof this.data.password != "string") {
+    this.data.password = "";
+  }
+  //get rid of any bogus properties
+  this.data = {
+    username: this.data.username.trim().toLowerCase(),
+    email: this.data.email.trim().toLowerCase(),
+    password: this.data.password,
+  };
+</pre></code>
+
+## Save user data into a database
+
+1. Create "db.js" in the root path
+2. `npm install mongodb`
+3. In "db.js" -
+<pre><code>
+const mongodb = require("mongodb");
+
+const connectionString =
+"mongodb+srv://abc:abc@cluster0-luxcw.azure.mongodb.net/JSFullStackNodeByAndy?retryWrites=true&w=majority";
+
+mongodb.connect(
+connectionString,
+{ useNewUrlParser: true, useUnifiedTopology: true },
+function (err, client) {
+//client.db() will return the exact database object we work in
+module.exports = client.db();
+const app = require("./app");
+app.listen(3000);
+}
+);
+
+</pre></code>
+4. In "app.js" - replace `app.listen(3000);` to `module.exports = app;`
+5. In "package.json" - change `"watch": "nodemon app.js"` to `"watch": "nodemon db.js"`
+6. In "User.js" - add `const userCollection = require("../db").collection("users");` to the top of the script
+7. In "User.js", change the register function to - 
+<pre><code>
+User.prototype.register = function () {
+  //1. validate username, email, password
+  this.cleanUp();
+  this.validate();
+  //2. Only if there are no validation errors, then save the user data into a database
+  if (!this.errors.length) {
+    userCollection.insertOne(this.data);
+  }
+};
+</pre></code>

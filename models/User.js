@@ -52,6 +52,22 @@ User.prototype.validate = function () {
     this.errors.push("Username can not exceed 30 characters");
   }
 };
+User.prototype.login = function (callback) {
+  this.cleanUp();
+  //look up data from the database
+  userCollection.findOne(
+    { username: this.data.username },
+    (err, attemptedUser) => {
+      //if the mongodb does find the matched user,
+      //it will pass the document as the variable "attemptedUser" into the function
+      if (attemptedUser && attemptedUser.password == this.data.password) {
+        callback("Congrats!!!");
+      } else {
+        callback("Invalid username / password");
+      }
+    }
+  );
+};
 User.prototype.register = function () {
   //1. validate username, email, password
   this.cleanUp();
@@ -61,4 +77,5 @@ User.prototype.register = function () {
     userCollection.insertOne(this.data);
   }
 };
+
 module.exports = User;

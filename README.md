@@ -240,3 +240,72 @@ User.prototype.register = function () {
    );
    </pre></code>
 5. Use the same way to hide the port number
+
+## Read data from databse (User login function)
+
+1. Add one more router url in "router.js" - `router.post("/login", userController.login)`
+2. In "userController.js" -
+<pre><code>
+exports.login = function (req, res) {
+  let user = new User(req.body);
+  user.login();
+};
+</pre></code>
+3. In "User.js" -
+<pre><code>
+User.prototype.login = function () {
+  this.cleanUp();
+  //look up data from the database
+  userCollection.findOne({ username: this.data.username }, function (
+    err,
+    attemptedUser
+  ) {
+    //if the mongodb does find the matched user,
+    //it will pass the document as the variable "attemptedUser" into the function
+
+});
+};
+
+</pre></code>
+** The Trap of "this" Keyword in Callback Function **
+eg:
+<pre><code>
+User.prototype.login = function () {
+  this.cleanUp();
+  //look up data from the database
+  userCollection.findOne({ username: this.data.username }, function (
+    err,
+    attemptedUser
+  ) {
+    //if the mongodb does find the matched user,
+    //it will pass the document as the variable "attemptedUser" into the function
+    if (attemptedUser && attemptedUser.password == this.data.password) {
+        console.log("Congrats!!!");
+    } else {
+        console.log("invalid Username / Pssword");
+    }
+  });
+};
+</pre></code>
+** <Chap. 53, 9:11 >The "this" keyword in `this.data.password` is not pointing to the object we are ready to call, since it is the "findOne" function calling the callback function, not it is the object calling the function, so the "this" keyword is pointing to the golbal object**
+** Fix: change the normal JavasScript anonymous callback function the the arrow function**
+<pre><code>
+User.prototype.login = function () {
+  this.cleanUp();
+  //look up data from the database
+  userCollection.findOne(
+    { username: this.data.username },
+    (err, attemptedUser) => {
+      //if the mongodb does find the matched user,
+      //it will pass the document as the variable "attemptedUser" into the function
+      if (attemptedUser && attemptedUser.password == this.data.password) {
+        console.log("Congrats!!!");
+      } else {
+        console.log("invalid Username / Pssword");
+      }
+    }
+  );
+};
+</pre></code>
+
+** <Chap. 53, 14:46>Callback Trap **

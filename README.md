@@ -85,11 +85,13 @@ exports.home = function (req, res) {
 
 #### In "home-gest.ejs" we have a form for user to register their account, when the user click the "register" button, the broswer will send a POST request to the server.
 
-`<form action="/register" method="POST" id="registration-form">`
-`<input type="text" name="username"/>`
-`<input type="text" name="email"/>`
-`<input type="password" name="password"/>`
-`</form>`
+<pre><code>
+<form action="/register" method="POST" id="registration-form">
+<input type="text" name="username"/>
+<input type="text" name="email"/>
+<input type="password" name="password"/>
+</form>
+</pre></code>
 
 1. Construct a model that reflects the "user" in this case.
 

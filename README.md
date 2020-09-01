@@ -289,7 +289,9 @@ User.prototype.login = function () {
 </pre></code>
 **<Chap. 53, 9:11 >The "this" keyword in `this.data.password` is not pointing to the object we are ready to call, in the case the "User" object will be called. The "findOne" function calls the callback function, so the "this" keyword is pointing to the golbal object**
 <hr>
+
 **Fix: change the normal JavasScript anonymous callback function to the arrow function**
+
 <pre><code>
 User.prototype.login = function () {
   this.cleanUp();

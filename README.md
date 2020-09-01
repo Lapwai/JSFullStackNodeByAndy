@@ -287,8 +287,8 @@ User.prototype.login = function () {
   });
 };
 </pre></code>
-** <Chap. 53, 9:11 >The "this" keyword in `this.data.password` is not pointing to the object we are ready to call, since it is the "findOne" function calling the callback function, not it is the object calling the function, so the "this" keyword is pointing to the golbal object**
-** Fix: change the normal JavasScript anonymous callback function the the arrow function**
+**<Chap. 53, 9:11 >The "this" keyword in `this.data.password` is not pointing to the object we are ready to call, in the case the "User" object will be called. The "findOne" function calls the callback function, so the "this" keyword is pointing to the golbal object**
+**Fix: change the normal JavasScript anonymous callback function to the arrow function**
 <pre><code>
 User.prototype.login = function () {
   this.cleanUp();
@@ -308,4 +308,4 @@ User.prototype.login = function () {
 };
 </pre></code>
 
-** <Chap. 53, 14:46>Callback Trap **
+**<Chap. 53, 14:46>Callback Trap...to be continued**

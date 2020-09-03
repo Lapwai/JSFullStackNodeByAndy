@@ -312,3 +312,111 @@ User.prototype.login = function () {
 </pre></code>
 
 **<Chap. 53, 14:46>Callback Trap...to be continued**
+
+## Promise(.all(), .race())
+
+#### To be continued
+
+## Hasing password
+
+1. `npm install bcryptjs`
+2. In "User.js" -
+<pre><code>
+User.prototype.register = function () {
+  //1. validate username, email, password
+  this.cleanUp();
+  this.validate();
+  //2. Only if there are no validation errors, then save the user data into a database
+  if (!this.errors.length) {
+    //hash user password
+    let salt = bcrypt.genSaltSync(10);
+    this.data.password = bcrypt.hashSync(this.data.password, salt);
+    userCollection.insertOne(this.data);
+  }
+};
+</pre></code>
+3. In "User.js" -
+<pre><code>
+User.prototype.login = function (callback) {
+  return new Promise((reslove, reject) => {
+    this.cleanUp();
+    //look up data from the database
+    userCollection
+      .findOne({ username: this.data.username })
+      .then((attemptedUser) => {
+        if (
+          attemptedUser &&
+          bcrypt.compareSync(this.data.password, attemptedUser.password)
+        ) {
+          reslove("Congrats!!!");
+        } else {
+          reject("Invalid username / password");
+        }
+      })
+      .catch(function () {
+        reject("Please try again later");
+      });
+  });
+};
+</pre></code>
+
+## Sessions (Store data in memory)
+
+#### How can we trust or identitfy requests?
+
+1. `npm install express-session`
+2. In "app.js" -
+<pre><code>
+const session = require("express-session");
+let sessionOptions = session({
+  secret: "I am andy",
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    //how long the cookie for a session should be valid
+    maxAge: 1000 * 60 * 60 * 24,
+    httpOnly: true,
+  },
+});
+app.use(sessionOptions);
+</pre></code>
+3. In "userController.js" -
+<pre><code>
+const User = require("../models/User");
+exports.login = function (req, res) {
+  console.log(req.body);
+
+let user = new User(req.body);
+user
+.login()
+.then(function (result) {
+req.session.user = {
+favColor: "lightpink",
+username: user.data.username,
+};
+res.send(result);
+})
+.catch(function (err) {
+res.send(err);
+});
+};
+exports.logout = function () {};
+exports.register = function (req, res) {
+let user = new User(req.body);
+user.register();
+if (user.errors.length) {
+res.send(user.errors);
+} else {
+res.send("Thanks for submitting");
+}
+};
+exports.home = function (req, res) {
+if (req.session.user) {
+res.send("Welcome to the actual application!!!");
+} else {
+res.render("home-guest");
+}
+};
+
+</pre></code>
+## Tokens

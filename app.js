@@ -1,6 +1,17 @@
 let express = require("express");
-
+const session = require("express-session");
 let app = express();
+
+let sessionOptions = session({
+  secret: "I am andy",
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24,
+    httpOnly: true,
+  },
+});
+app.use(sessionOptions);
 const router = require("./router");
 //Add submit data on to our request object, so we can access data from req.body
 app.use(express.urlencoded({ extended: false }));

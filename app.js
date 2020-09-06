@@ -1,9 +1,11 @@
 let express = require("express");
 const session = require("express-session");
+const MongoStore = require("connect-mongo")(session);
 let app = express();
 
 let sessionOptions = session({
   secret: "I am andy",
+  store: new MongoStore({ client: require("./db") }),
   resave: false,
   saveUninitialized: false,
   cookie: {
@@ -13,6 +15,7 @@ let sessionOptions = session({
 });
 app.use(sessionOptions);
 const router = require("./router");
+const { Mongos } = require("mongodb");
 //Add submit data on to our request object, so we can access data from req.body
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());

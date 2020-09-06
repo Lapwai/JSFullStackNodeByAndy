@@ -6,7 +6,7 @@ mongodb.connect(
   { useNewUrlParser: true, useUnifiedTopology: true },
   function (err, client) {
     //client.db() will return the exact database object we work in
-    module.exports = client.db();
+    module.exports = client;
     const app = require("./app");
     app.listen(process.env.PORT);
   }

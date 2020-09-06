@@ -420,3 +420,63 @@ res.render("home-guest");
 
 </pre></code>
 ## Tokens
+
+## Sessions (Store data in Mongodb)
+
+1. `npm install connect-mongo`
+
+2. In "app.js" -
+`const MongoStore = require("connect-mongo")(session);`
+<pre><code>
+let sessionOptions = session({
+  secret: "I am andy",
+  store: new MongoStore({ client: require("./db") }),
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24,
+    httpOnly: true,
+  },
+});
+</pre></code>
+3. In "db.js" -
+<pre><code>
+const dotenv = require("dotenv");
+const mongodb = require("mongodb");
+dotenv.config();
+mongodb.connect(
+  process.env.CONNECTIONSTRING,
+  { useNewUrlParser: true, useUnifiedTopology: true },
+  function (err, client) {
+    //client.db() will return the exact database object we work in
+    module.exports = client;
+    const app = require("./app");
+    app.listen(process.env.PORT);
+  }
+);
+
+</pre></code>
+3. In "User.js" - 
+<pre><code>
+const userCollection = require("../db").db().collection("users");
+</pre></code>
+
+## Use JavasScript script in HTML
+
+1. using `<%%>` to run Javascript in HTML
+
+2. using `<%=%>` to output Javascript in HTML
+
+3. passing data
+
+`{ username: req.session.user.username }`
+
+<pre><code>
+exports.home = function (req, res) {
+  if (req.session.user) {
+    res.render("home-dashboard", { username: req.session.user.username });
+  } else {
+    res.render("home-guest");
+  }
+};
+</pre></code>

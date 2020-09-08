@@ -516,3 +516,57 @@ exports.login = function (req, res) {
     });
 };
 </pre></code>
+
+## Setup "Flash Message"
+
+1. `npm install connect-flash`
+2. In "app.js" -
+<pre><code>
+const flash = require("connect-flash");
+app.use(flash());
+
+</pre></code>
+3. In "userController.js" - 
+<pre><code>
+exports.login = function (req, res) {
+  console.log(req.body);
+
+let user = new User(req.body);
+user
+.login()
+.then(function (result) {
+req.session.user = {
+favColor: "lightpink",
+username: user.data.username,
+};
+req.session.save(function () {
+res.redirect("/");
+});
+})
+.catch(function (e) {
+req.flash("errors", e);
+//req.session.flash.errors=[e]
+req.session.save(function () {
+res.redirect("/");
+});
+});
+};
+
+</pre></code>
+4. In "userController.js" - 
+<pre><code>
+exports.home = function (req, res) {
+  if (req.session.user) {
+    res.render("home-dashboard", { username: req.session.user.username });
+  } else {
+    res.render("home-guest", { errors: req.flash("errors") });
+  }
+};
+</pre></code>
+
+5. In "home-guest.ejs" -
+<pre><code>
+<%errors.forEach(function(message){ %>
+  <div class="alert alert-danger text-center"><%=message%></div>
+<%})%>
+</pre></code>

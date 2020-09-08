@@ -360,7 +360,7 @@ User.prototype.login = function (callback) {
 };
 </pre></code>
 
-## Sessions (Store data in memory)
+## Sessions (Store session data in memory)
 
 #### How can we trust or identitfy requests?
 
@@ -421,7 +421,7 @@ res.render("home-guest");
 </pre></code>
 ## Tokens
 
-## Sessions (Store data in Mongodb)
+## Sessions (Store session data in Mongodb)
 
 1. `npm install connect-mongo`
 
@@ -478,5 +478,41 @@ exports.home = function (req, res) {
   } else {
     res.render("home-guest");
   }
+};
+</pre></code>
+
+## Letting using to logout (destroy session data in databse)
+
+1. In "User.js" -
+   `router.post("/logout", userController.logout);`
+2. In "userController.js" -
+<pre><code>
+exports.logout = function (req, res) {
+  //destroy method takes time, so we use callback
+  req.session.destroy(function () {
+    res.redirect("/");
+  });
+};
+</pre></code>
+
+<pre><code>
+exports.login = function (req, res) {
+  console.log(req.body);
+
+  let user = new User(req.body);
+  user
+    .login()
+    .then(function (result) {
+      req.session.user = {
+        favColor: "lightpink",
+        username: user.data.username,
+      };
+      req.session.save(function () {
+        res.redirect("/");
+      });
+    })
+    .catch(function (err) {
+      res.send(err);
+    });
 };
 </pre></code>

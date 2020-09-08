@@ -570,3 +570,43 @@ exports.home = function (req, res) {
   <div class="alert alert-danger text-center"><%=message%></div>
 <%})%>
 </pre></code>
+
+## User registration improvement(errors)
+
+1. In "userController.js" -
+   <pre><code>
+   exports.register = function (req, res) {
+     let user = new User(req.body);
+     user.register();
+     if (user.errors.length) {
+       user.errors.forEach(function (error) {
+         req.flash("regErrors", error);
+       });
+       req.session.save(function () {
+         res.redirect("/");
+       });
+     } else {
+       res.send("Thanks for submitting");
+     }
+   };
+   </pre></code>
+   <pre><code>
+   exports.home = function (req, res) {
+     if (req.session.user) {
+       res.render("home-dashboard", { username: req.session.user.username });
+     } else {
+       res.render("home-guest", {
+         errors: req.flash("errors"),
+         regErrors: req.flash("regErrors"),
+       });
+     }
+   };
+   </pre></code>
+2. In "home-guest.ejs" -
+<pre><cdoe>
+<%regErrors.forEach(function(message){ %>
+  <div class="alert alert-danger small"><%=message%></div>
+  <%})%>
+</pre><code>
+
+## User registration improvement(form data unique)

@@ -610,3 +610,22 @@ exports.home = function (req, res) {
 </pre><code>
 
 ## User registration improvement(form data unique)
+
+## Adding User Avatar/Profile Photos (Gravatar)
+
+1. In "User.js" -
+<pre><code>
+const md5 = require("md5");
+
+Uwer.prototype.getAvatar = function () {
+this.avatar = `https://gravatar.com/avatar/email?s=128`;
+};
+
+</pre></code>
+
+2. `npm install md5`
+
+## Partical Display
+
+1. `<%- include("includes/header")%>`
+2. "includes/header" is the url path
